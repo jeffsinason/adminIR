@@ -1,0 +1,10 @@
+{
+    "IR" : 
+        {
+            "ir-01-quickstart" : { "replicas" : 1 },
+            "extract-flow-small-ir" : { "replicas" : 2 },
+            "ir-03-medium" : { "replicas" : 1 },
+            "process-flow-small" : { "replicas" : 2 }
+                              
+        }
+}

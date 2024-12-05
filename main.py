@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from threading import Thread
+from pytz import timezone
 
 
 # load_dotenv() for sensitive information
@@ -22,7 +23,6 @@ IBM_INSTANCE_ID= os.getenv("IBM_INSTANCE_ID")
 API_KEY = {
         "apiKey": os.getenv("API_KEY")
     }
-
 # #####################################################
 # Environment Variables
 # #####################################################
@@ -58,9 +58,6 @@ file_handler.setFormatter(
     logging.Formatter("%(asctime)s - %(name)s - %(module)s - %(funcName)s - %(levelname)s - %(message)s")
 )
 
-
-
- 
 # Set up logging configuration
 logging.basicConfig(
     level=logging.INFO,  # Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
@@ -90,7 +87,10 @@ logger.info("Parameters Loaded: %s", params)
 # Application setup
 
 flask_app = Flask(__name__)
-flask_app.secret_key = '123456789'  # Required for flashing messages
+flask_app.secret_key = os.urandom(24) # Required for flashing messages using this 
+                                      # makes session using flask non-persistent
+                                      # across startups.  Not a requirment at this 
+                                      # time but may be in the future
 fastapi_app = FastAPI()
 
 logger.info("Starting the application")
@@ -111,7 +111,7 @@ def status():
 
     url = f"{API_BASE_URL}/listIR"
     
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    current_time = datetime.now(timezone(params['SYSTEM']['timezone'])).strftime("%Y-%m-%d %H:%M:%S")
     
     try:
         response = requests.get(url)

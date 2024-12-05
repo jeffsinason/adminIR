@@ -6,5 +6,9 @@
             "ir-03-medium" : { "replicas" : 1 },
             "process-flow-small" : { "replicas" : 2 }
                               
+        },
+    "SYSTEM" :
+        {
+            "timezone" : "America/Chicago"
         }
 }
